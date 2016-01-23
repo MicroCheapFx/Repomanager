@@ -33,7 +33,7 @@ def color_print(text, color):
     print(get_color_text(COLORS[color], text))
 
 
-zsh:1: command not found: q
+def question(question, defaultAnswer) :
     """Ask question, if answer is empty, return defaultAnswer
 
     :question: TODO
