@@ -14,7 +14,6 @@ import mezzanine_repo
 import flask_repo
 
 
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -51,6 +50,8 @@ def main():
     if os.path.isfile(configFile) :
         config = configparser.ConfigParser()
         config.read(configFile)
+        author = config['USER']['name']
+        email = config['USER']['email']
         remote = config['PATH']['server']
         remoteGitDir = config['PATH']['serverRepoPath']
         localRepoDir = os.environ["HOME"] + config['PATH']['localRepoPath']
@@ -70,7 +71,7 @@ def main():
 
     elif args.django :
         create_repo(args.django[0], remote, remoteGitDir, packages=['django'])
-        django_repo.deploy(args.django[0], args.django[1])
+        django_repo.deploy(args.django[0], args.django[1], author="fx", password="fxfxfxfx", email='john@doe.com')
 
     elif args.mezzanine :
         create_repo(args.mezzanine, remote, remoteGitDir, python='python3.3', packages=['mezzanine'])

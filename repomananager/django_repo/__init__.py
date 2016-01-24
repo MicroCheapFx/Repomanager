@@ -5,7 +5,7 @@ import os
 import pew
 
 
-def deploy(project, app, author='joe', password="qaqaqaqa" ):
+def deploy(project, app, author='joe', password="qaqaqaqa", email="john@doe.com" ):
     """django.deploy() deocsting
 
     Deploys a Django project
@@ -23,6 +23,6 @@ def deploy(project, app, author='joe', password="qaqaqaqa" ):
     os.chdir(project)
     pew.pew.inve(project, 'django-admin', 'startapp', app)
     pew.pew.inve(project, 'python', './manage.py', 'migrate' )
-    pew.pew.inve(project, 'python', './manage.py', 'createsuperuser', '--username='+author, '--password='+password)
+    pew.pew.inve(project, 'python', './manage.py', 'createsuperuser', '--username='+author, '--email='+email)
 
     pass
