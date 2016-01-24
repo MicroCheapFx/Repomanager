@@ -3,14 +3,15 @@
 import argparse
 import subprocess
 import os
+import configparser
+import pew
+
 
 from prompt import color_print, question
 import sample_repo
 import django_repo
 import mezzanine_repo
 import flask_repo
-
-localRepoDir = os.environ["HOME"]+"/srv/"
 
 
 
@@ -37,35 +38,71 @@ def main():
             '-fk', '--flask',
             help='Create a new flask project repository'
             )
-    #parser.add_argument('name', metavar='name', type=str)
-    #parser.add_argument('-y', '--yes', action='store_true', help='answer to all question default answer')
+    parser.add_argument('-c', '--config', help="alternate config file")
     args = parser.parse_args()
+
+    if args.config :
+        configFile = args.config
+    else :
+        configFile = os.environ["HOME"] +"/.config/repomanager/config.cfg"
+
+    localRepoDir = os.environ["HOME"]+"/srv/"
+    print(localRepoDir)
+    if os.path.isfile(configFile) :
+        config = configparser.ConfigParser()
+        config.read(configFile)
+        remote = config['PATH']['server']
+        remoteGitDir = config['PATH']['serverRepoPath']
+        localRepoDir = os.environ["HOME"] + config['PATH']['localRepoPath']
+        print(localRepoDir)
+    else :
+        print("fichier perdu.")
+        localRepoDir = os.environ["HOME"]+"/srv/"
+
+
     os.chdir(localRepoDir)
     savedPath = os.getcwd()
 
+
     if args.sample :
-        create_repo(args.sample)
+        create_repo(args.sample, remote, remoteGitDir)
+        pew.pew.mkvirtualenv(args.sample)
+        #subprocess.run(["pew", "new", venvDir])
         sample_repo.deploy(args.sample)
 
-    if args.django :
-        create_repo(args.django[0])
-        sample_repo.deploy(args.django[0], args.django[1])
-        print("Not Implemented Yet.")
+    elif args.django :
+        print("DEBUG 00")
+        create_repo(args.django[0], remote, remoteGitDir)
+        print("DEBUG 01")
+        pew.pew.mkvirtualenv(args.django[0], packages=['django'])
+        #venvDir = os.environ["WORKON_HOME"]+"/"+args.django[0]
+        #print(venvDir)
+        #subprocess.run(["virtualenv", venvDir])
+        print("DEBUG 02")
+        django_repo.deploy(args.django[0], args.django[1])
+        print("DEBUG 03")
 
-    if args.mezzanine :
+    elif args.mezzanine :
         create_repo(args.mezzanine)
-        sample_repo.deploy(args.mezzanine)
+        pew.pew.mkvirtualenv(args.mezzanine, python='python3.3', packages=['mezzanine'])
+        mezzanine_repo.deploy(args.mezzanine)
         print("Not Implemented Yet.")
 
-    if args.flask :
+    elif args.flask :
         create_repo(args.flask)
-        sample_repo.deploy(args.flask)
+        pew.pew.mkvirtualenv(args.flask, packages=['flask'])
+        flask_repo.deploy(args.flask)
         print("Not Implemented Yet.")
     
     os.chdir(savedPath)
 
+
     if args.delete :
-        delete_repo(args.delete)
+        delete_repo(args.delete, localRepoDir)
+        #pew.pew.rmvirtualenvs([name])
+        #venvDir = os.environ["WORKON_HOME"]+"/"+args.delete
+        #subprocess.run(["pew", "wipeenv", args.delete])
+        #subprocess.run(["rm", "-rvf", venvDir])
         subprocess.run(["rm", "-rvf", localRepoDir + args.delete])
 
 
@@ -89,7 +126,7 @@ def main():
         #delete_repo(args.name)
 
 
-def create_repo(name,remote="yuno",remoteGitDir="/var/git/"):
+def create_repo(name, remote, remoteGitDir):
     command = "git init --bare " + remoteGitDir + name
     subprocess.run(["ssh", remote, command])
     command = "clone"
@@ -97,9 +134,11 @@ def create_repo(name,remote="yuno",remoteGitDir="/var/git/"):
     subprocess.run(["git", command, target])
 
 
-def delete_repo(name,remote="yuno",remoteGitDir="/var/git/"):
+def delete_repo(name, localRepoDir, remote="yuno", remoteGitDir="/var/git/"):
     command = "rm -rvf " + remoteGitDir + name
     subprocess.run(["ssh", remote, command])
+    command = "rm -rvf " + localRepoDir + name
+    pew.pew.rmvirtualenvs([name])
 
 
 if __name__ == '__main__':
