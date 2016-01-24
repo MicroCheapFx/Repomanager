@@ -5,10 +5,10 @@ import subprocess
 import os
 
 def deploy(project):
-    """django.deploy() deocsting
+    """sample.deploy() deocsting
 
     Deploys a sample python project
-    :project: name of the django project to deploy
+    :project: name of the python project to deploy
     :returns: TODO
 
     """

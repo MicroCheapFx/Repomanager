@@ -66,79 +66,41 @@ def main():
 
     if args.sample :
         create_repo(args.sample, remote, remoteGitDir)
-        pew.pew.mkvirtualenv(args.sample)
-        #subprocess.run(["pew", "new", venvDir])
         sample_repo.deploy(args.sample)
 
     elif args.django :
-        print("DEBUG 00")
-        create_repo(args.django[0], remote, remoteGitDir)
-        print("DEBUG 01")
-        pew.pew.mkvirtualenv(args.django[0], packages=['django'])
-        #venvDir = os.environ["WORKON_HOME"]+"/"+args.django[0]
-        #print(venvDir)
-        #subprocess.run(["virtualenv", venvDir])
-        print("DEBUG 02")
+        create_repo(args.django[0], remote, remoteGitDir, packages=['django'])
         django_repo.deploy(args.django[0], args.django[1])
-        print("DEBUG 03")
 
     elif args.mezzanine :
-        create_repo(args.mezzanine)
-        pew.pew.mkvirtualenv(args.mezzanine, python='python3.3', packages=['mezzanine'])
+        create_repo(args.mezzanine, remote, remoteGitDir, python='python3.3', packages=['mezzanine'])
         mezzanine_repo.deploy(args.mezzanine)
-        print("Not Implemented Yet.")
 
     elif args.flask :
-        create_repo(args.flask)
-        pew.pew.mkvirtualenv(args.flask, packages=['flask'])
+        create_repo(args.flask, remote, remoteGitDir, packages=['flask'])
         flask_repo.deploy(args.flask)
-        print("Not Implemented Yet.")
     
     os.chdir(savedPath)
 
 
     if args.delete :
-        delete_repo(args.delete, localRepoDir)
-        #pew.pew.rmvirtualenvs([name])
-        #venvDir = os.environ["WORKON_HOME"]+"/"+args.delete
-        #subprocess.run(["pew", "wipeenv", args.delete])
-        #subprocess.run(["rm", "-rvf", venvDir])
-        subprocess.run(["rm", "-rvf", localRepoDir + args.delete])
+        delete_repo(args.delete, localRepoDir, remote, remoteGitDir)
 
 
-#    if args.create :
-        #savedPath = os.getcwd()
-        #print(localRepoDir)
-        ##subprocess.run(["virtualenv", os.environ["WORKON_HOME"]+"/"+args.name])
-        #if args.django :
-            #os.chdir(localRepoDir)
-            #django_deploy.deploy(args.name, args.app)
-            #pass
-        #else :
-            #os.chdir(localRepoDir)
-            #print("Initalizing sample python module repository")
-            #happiness = question("Are you Happy?", "Yes I am.")
-            #print(happiness)
-            #pass
-        #os.chdir(savedPath)
-
-    #if args.delete :
-        #delete_repo(args.name)
-
-
-def create_repo(name, remote, remoteGitDir):
-    command = "git init --bare " + remoteGitDir + name
+def create_repo(project, remote, remoteGitDir, python="python3.5", packages=[]):
+    command = "git init --bare " + remoteGitDir + project
     subprocess.run(["ssh", remote, command])
     command = "clone"
-    target = "ssh://"+ remote + remoteGitDir + name
+    target = "ssh://"+ remote + remoteGitDir + project
     subprocess.run(["git", command, target])
+    pew.pew.mkvirtualenv(project, python=python, packages=packages)
 
 
-def delete_repo(name, localRepoDir, remote="yuno", remoteGitDir="/var/git/"):
-    command = "rm -rvf " + remoteGitDir + name
+def delete_repo(project, localRepoDir, remote="yuno", remoteGitDir="/var/git/"):
+    command = "rm -rvf " + remoteGitDir + project
     subprocess.run(["ssh", remote, command])
-    command = "rm -rvf " + localRepoDir + name
-    pew.pew.rmvirtualenvs([name])
+    subprocess.run(["rm", "-rvf", localRepoDir + project])
+    pew.pew.rmvirtualenvs([project])
 
 
 if __name__ == '__main__':

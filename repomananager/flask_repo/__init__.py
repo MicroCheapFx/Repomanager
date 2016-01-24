@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def deploy(project, app):
-    """django.deploy() deocsting
+def deploy(project):
+    """flask.deploy() deocsting
 
-    Deploys a Django project
-    :project: name of the django project to deploy
+    Deploys a Flask project
+    :project: name of the flask project to deploy
     :returns: TODO
 
     """
-    print("Django project deployement.")
+    print("Flask project deployement.")
+    print("==========================")
     pass

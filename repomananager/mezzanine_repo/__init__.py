@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-def deploy(project, app):
-    """django.deploy() deocsting
+def deploy(project):
+    """mezzanine.deploy() deocsting
 
-    Deploys a Django project
-    :project: name of the django project to deploy
+    Deploys a Mezzanine project
+    :project: name of the mezzanine project to deploy
     :returns: TODO
 
     """
-    print("Django project deployement.")
+    print("Mezzanine project deployement.")
+    print("==============================")
     pass
