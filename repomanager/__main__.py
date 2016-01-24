@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+'''
+Repomanager
+===========
+
+repomanager's routines
+'''
+
 import argparse
 import subprocess
 import os
@@ -15,6 +23,10 @@ import flask_repo
 
 
 def main():
+    ''' Docstring for MAIN FUNCTION
+
+    Yess
+    '''
     parser = argparse.ArgumentParser()
     parser.add_argument(
             '--delete',
@@ -94,6 +106,9 @@ def main():
 
 
 def create_repo(project, remote, remoteGitDir, python="python3.5", packages=[]):
+    '''
+    Docstrin for create_repo
+    '''
     command = "git init --bare " + remoteGitDir + project
     subprocess.run(["ssh", remote, command])
     command = "clone"
@@ -103,6 +118,9 @@ def create_repo(project, remote, remoteGitDir, python="python3.5", packages=[]):
 
 
 def delete_repo(project, localRepoDir, remote="yuno", remoteGitDir="/var/git/"):
+    '''
+    Docstrin for delete_repo
+    '''
     command = "rm -rvf " + remoteGitDir + project
     subprocess.run(["ssh", remote, command])
     subprocess.run(["rm", "-rvf", localRepoDir + project])
