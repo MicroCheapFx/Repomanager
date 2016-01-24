@@ -67,7 +67,12 @@ def main():
 
     if args.sample :
         create_repo(args.sample, remote, remoteGitDir)
-        sample_repo.deploy(args.sample)
+
+        source = os.path.abspath(sample_repo.__file__)[0:-11] + "tree"
+        #source = os.path.abspath(sample_repo.__file__)
+        #source = source[0:-11] + "tree"
+        print(source)
+        sample_repo.deploy(args.sample, source)
 
     elif args.django :
         create_repo(args.django[0], remote, remoteGitDir, packages=['django'])
