@@ -5,7 +5,8 @@
 Repomanager
 ===========
 
-repomanager's routines
+Deploy a distant git reopsitory clone it locally and build a fresh new python
+project.
 '''
 
 import argparse
@@ -33,7 +34,50 @@ import repomanager.flask_repo
 #        author='John Doe'.__init__(self)
 #        python='python3.5'.__init__(self)
 #        github=False.__init__(self)
- #       license='GPL'.__init__(self)
+#       license='GPL'.__init__(self)
+
+#class project(name, author, python, license, github=False):
+#
+    #"""Class for repositories. """
+#
+    #def __init__(self):
+        #"""TODO: to be defined1. """
+        #name.__init__(self)
+        #author.__init__(self)
+        #python.__init__(self)
+        #license.__init__(self)
+        #github=False.__init__(self)
+#
+    #def create_repo(project, remote, remoteGitDir, python="python3.5", packages=[]):
+        #'''
+        #Generate a distant git repository, then clone it locally and build a virtualenv
+        #'''
+        #command = "git init --bare " + remoteGitDir + project
+        #subprocess.run(["ssh", remote, command])
+        #command = "clone"
+        #target = "ssh://"+ remote + remoteGitDir + project
+        #subprocess.run(["git", command, target])
+        #pew.pew.mkvirtualenv(project, python=python, packages=packages)
+#
+#
+    #def delete_repo(project, localRepoDir, remote="yuno", remoteGitDir="/var/git/"):
+        #'''
+        #Delete a distant git repository, delete local repository and virtualenv
+        #'''
+        #command = "rm -rvf " + remoteGitDir + project
+        #subprocess.run(["ssh", remote, command])
+        #subprocess.run(["rm", "-rvf", localRepoDir + project])
+        #pew.pew.rmvirtualenvs([project])
+#
+#
+    #def create_repo(self, arg1):
+        #"""TODO: Docstring for create_repo.
+#
+        #:arg1: TODO
+        #:returns: TODO
+#
+        #"""
+        #pass     
 
 
 def main():
@@ -95,9 +139,6 @@ def main():
         create_repo(args.sample, remote, remoteGitDir)
 
         source = os.path.abspath(sample_repo.__file__)[0:-11] + "tree"
-        #source = os.path.abspath(sample_repo.__file__)
-        #source = source[0:-11] + "tree"
-        print(source)
         sample_repo.deploy(args.sample, source)
 
     elif args.django :
@@ -121,7 +162,7 @@ def main():
 
 def create_repo(project, remote, remoteGitDir, python="python3.5", packages=[]):
     '''
-    Docstrin for create_repo
+    Generate a distant git repository, then clone it locally and build a virtualenv
     '''
     command = "git init --bare " + remoteGitDir + project
     subprocess.run(["ssh", remote, command])
@@ -133,7 +174,7 @@ def create_repo(project, remote, remoteGitDir, python="python3.5", packages=[]):
 
 def delete_repo(project, localRepoDir, remote="yuno", remoteGitDir="/var/git/"):
     '''
-    Docstrin for delete_repo
+    Delete a distant git repository, delete local repository and virtualenv
     '''
     command = "rm -rvf " + remoteGitDir + project
     subprocess.run(["ssh", remote, command])
