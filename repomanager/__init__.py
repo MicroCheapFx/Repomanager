@@ -15,11 +15,11 @@ import os
 import configparser
 import pew
 
-from repomanager.prompt import color_print, question
-import repomanager.sample_repo
-import repomanager.django_repo
-import repomanager.mezzanine_repo
-import repomanager.flask_repo
+from prompt import color_print, question
+import sample_repo
+import django_repo
+import mezzanine_repo
+import flask_repo
 
 
 #class repo(name='test00', author='John Doe', python='python3.5', github=False, license='GPL'):

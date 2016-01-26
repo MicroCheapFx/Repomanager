@@ -36,7 +36,7 @@ setup(
     author_email='fx@microcheap.info',
 
     # Choose your license
-    license='GNUPL',
+    license='GNUPL v3',
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
